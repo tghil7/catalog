@@ -1,0 +1,56 @@
+<html>
+
+<body>
+
+<h1>{{category.name}}</h1>
+
+{% if category.name == "Cars" %}
+    {% for i in items %}
+
+<div>
+
+<p>{{i.make}}</p>
+<p>{{i.model}}</p>
+<p>{{i.year}}</p>
+<p>{{i.image}}</p>
+<p> {{i.price}} </p>
+</div>
+
+
+    {% endfor %}
+
+
+{% elif category.name == "House" %}
+    {% for i in items %}
+
+<div>
+
+<p>{{i.style}}</p>
+<p>{{i.id}}</p>
+<p>{{i.year}}</p>
+<p>{{i.image}}</p>
+<p> {{i.price}} </p>
+</div>
+
+
+    {% endfor %}
+
+
+{% elif category.name == "Furniture" %}
+    {% for i in items %}
+
+<div>
+
+<p>{{i.style}}</p>
+<p>{{i.id}}</p>
+<p>{{i.year}}</p>
+<p>{{i.image}}</p>
+<p> {{i.price}} </p>
+</div>
+
+
+    {% endfor %}
+{% endif %}
+
+
+</body>
