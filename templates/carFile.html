@@ -14,24 +14,40 @@
 </head>
 
 <body>
+<nav class="navbar navbar-default">
+    <div id="mine" >
+      <div class="navbar-header">
+        <a class="navbar-brand" href="{{url_for('goodCategories')}}">Living Well Properties</a>
+      </div>
+      <div>
+        <ul class="nav navbar-nav">
+         <li ><a id="home" href="{{url_for('goodCategories')}}" class="elem">Home</a></li>
+          <li><a  href="{{url_for('showLogin')}}" class="elem">Login</a></li>
+		<li><a href="{{url_for('goAbout')}}" class="elem">About</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
 
+
+
+
+
+
+<div id ="carInfo" class="info well">
 <h1>Car description:</h1>
+<p>{{myCar.make + " " + myCar.model}}</p>
+<p>Year: {{myCar.year}}</p>
+<p> Color:  {{myCar.color}}</p>
+<p>Price:  ${{myCar.price}}</p>
 
-
-{% for i in carDescriptions %}
-
-<div id ="carInfo" class="info">
-<p>{{i.make + " " + i.model}}</p>
-<p>Year: {{i.year}}</p>
-<p> Color:  {{i.color}}</p>
-<p>Price:  ${{i.price}}</p>
-</div>
 <div id ="carImage" class="itemPic">
-<img src="/static{{i.image}}.jpg" alt="{{i.model}}" class="itemImage">
+<img src="/static/img/{{myCar.image}}.jpg" alt="{{myCar.model}}" class="itemImage">
+</div>
 </div>
 
 
-{% endfor %}
+
 </body>
 
 </html>

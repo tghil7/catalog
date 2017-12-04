@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang ="en">
 <head>
-	 <title>New Car</title>
+	 <title>New-furniture</title>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
@@ -12,7 +12,7 @@
   <link href="https://fonts.googleapis.com/css?family=Berkshire+Swash|Pontano+Sans" rel="stylesheet"> 
 </head>
 <body>
-<nav class="navbar navbar-default">
+	<nav class="navbar navbar-default">
     <div id="mine" >
       <div class="navbar-header">
         <a class="navbar-brand" href="{{url_for('goodCategories')}}">Living Well Properties</a>
@@ -26,21 +26,17 @@
       </div>
     </div>
   </nav>
-	<div class="row info well">
+	<div class="row well info">
 		<div class="col-md-6 col-md-offset-1 padding-top">
-		 <h2>Please enter the details of the new car:<br/><br/></h2>
-		 <form action="#" method = "post">
+		 <h2>Please enter the details of the new furniture:<br/><br/></h2>
+			<form action="#" method = "post">
 				<div >
-				<label for="make">Make:</label>
-				<input type ="text" class="" maxlength="100" name="make"><br/>
-				<label for="model">Model:</label>
-				<input type ="text" class="" maxlength="100" name="model"><br/>
+				<label for="style">Style:</label>
+				<input type ="text" class="" maxlength="100" name="style"><br/>
 				<label for="year">Year:</label>
 				<input type ="text" class="" maxlength="100" name="year"><br/>
 				<label for="price">Price:</label>
 				<input type ="text" class="" maxlength="100" name="price"><br/>
-				<label for="color">Color:</label>
-				<input type ="text" class="" maxlength="100" name="color"><br/>
 				<label for="image">image:</label>
 				<input type ="text" class" maxlength="100" name="image">
 				<button type="submit" class="btn btn-default" id="submit" type="submit">

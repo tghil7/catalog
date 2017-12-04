@@ -1,7 +1,22 @@
 <html>
 
 <body>
+<nav class="navbar navbar-default">
+    <div id="mine" >
+      <div class="navbar-header">
+        <a class="navbar-brand" href="{{url_for('goodCategories')}}">Living Well Properties</a>
+      </div>
+      <div>
+        <ul class="nav navbar-nav">
+         <li ><a id="home" href="{{url_for('goodCategories')}}" class="elem">Home</a></li>
+          <li><a  href="{{url_for('showLogin')}}" class="elem">Login</a></li>
+		<li><a href="{{url_for('goAbout')}}" class="elem">About</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
 
+<div class="info well">
 <h1>{{category.name}}</h1>
 
 {% if category.name == "Cars" %}
@@ -52,5 +67,5 @@
     {% endfor %}
 {% endif %}
 
-
+</div>
 </body>

@@ -1,0 +1,108 @@
+<!DOCTYPE html >
+<html lang="en">
+<head>
+  <title>Home</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+ <link rel="stylesheet" href="{{url_for('static', filename ='livingStyle.css')}}">
+   <script type="text/javascript" src="{{url_for('static', filename ='LivingStyle.js')}}"></script> 
+  <link href="https://fonts.googleapis.com/css?family=Berkshire+Swash|Pontano+Sans" rel="stylesheet"> 
+</head>
+<body>
+<div id="wrapper" class = "container" >
+	
+	<nav class="navbar navbar-default">
+    <div id="mine" >
+      <div class="navbar-header">
+        <a class="navbar-brand" href="#">Living Well Properties</a>
+      </div>
+      <div>
+        <ul class="nav navbar-nav">
+          <li class="active"><a href="#">Home</a></li>
+          <li><a  href="#">Login</a></li>
+          <li><a href="#">Listings</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+	
+	
+	
+	
+   <div id="pictures" class="carousel slide container" data-ride="carousel">
+   <!--Indicators-->
+                  <div id="searchSection" class="carousel-caption">
+                        <h3>Find your dream  car, house or furniture here:</h3>
+				         <button type="button"   class="btn btn-default">BUY</button>
+				         <button type="button"   class="btn btn-default">RENT</button>                      
+                            <!-- Nav tabs -->
+                             <ul class="nav nav-tabs" data-tabs="tabs">
+							      <li class="active" ><a href="#latestItems" data-toggle="tab">Latest Items</a></li>
+							       <li ><a href="#cars" data-toggle="tab">Cars</a></li>
+                                   <li><a href="#houses" data-toggle="tab">Houses</a></li>
+                                   <li><a href="#furnitures" data-toggle="tab">Furnitures</a></li>
+                             </ul>
+ 
+                         
+                            <!-- Tab panes -->
+                           <div class="tab-content">     
+                                <div class="tab-pane active" id="latestItems">
+									<h3>Latest Items</h3>
+						               {%for i in latestCars %}
+	                                        <p>{{ (i.year|string) + " " + i.make + " "  + i.model + " " + "(Car)"}}</p>
+							           {% endfor %}
+							           {%for i in latestHouses %}
+	                                        <p>{{i.style + " style. Built in  "  + (i.year|string)+ "(House)"}}</p>
+							           {% endfor %}
+							           {%for i in latestFurnitures %}
+	                                        <p>{{i.style + " conception. Made in  "  + (i.year|string)+ "(Furniture)"}}</p>
+							           {% endfor %}						 
+								</div>
+                                <div class="tab-pane extend" id="cars">
+								<br/>
+								 {%for  i in allCars %}
+								           <p><a href="{{url_for('carDetails',carItem_make = i.make )}}">{{ (i.year|string) + " " + i.make + " "  + i.model}}</a></p>
+								{% endfor %}
+								</div>
+                                <div class="tab-pane extend"  id="houses">
+								<br/>
+								    {%for  i in allHouses %}
+								            <p><a href="{{url_for('houseDetails',houseItem_style = i.style )}}">{{i.style + " style. Built in  "  + (i.year|string)}}</a></p>
+								   {% endfor %}
+								</div>
+                                <div class="tab-pane extend" id="furnitures">
+								 <br/>
+								 {%for  i in allFurnitures %}
+								          <p><a href="{{url_for('furnitureDetails',furnitureItem_style = i.style )}}">{{i.style + " conception. Made in  "  + (i.year|string)}}</a></p>
+								 {% endfor %}
+								</div>
+                           </div>
+                        
+   
+	          </div>
+    	
+              <ol class="carousel-indicators">
+                <li data-target="#pictures" data-slide-to="0" class="active"></li>
+                <li data-target="#pictures" data-slide-to="1"></li>
+                <li data-target="#pictures" data-slide-to="2"></li>
+              </ol>
+    <!--Wrapper for slides-->
+               <div class="carousel-inner" id="actualImages">						   
+                   <div class="item active"><img src="{{url_for('static', filename ='cottage.jpg')}}"  alt ="cottage"></div>				   
+                   <div class="item"><img src="{{url_for('static', filename ='backyard.jpg')}}" alt="backyard" ></div>
+                   <div class="item"><img src="{{url_for('static', filename ='futuristic.jpg')}}" alt ="futuristic"></div>
+              </div>		  
+    <!--Controls -->
+    <a class="left carousel-control" href="#pictures"  data-slide="prev"><span class="glyphicon glyphicon-chevron-left"></span><span class ="sr-only">Previous</span></a>
+	<a class="right carousel-control" href="#pictures"  data-slide="next"><span class="glyphicon glyphicon-chevron-right"></span><span class ="sr-only">Next</span></a>
+   </div>
+   
+     
+ </div>
+   
+ 
+</body>
+</html>

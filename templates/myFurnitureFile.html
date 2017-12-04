@@ -1,7 +1,8 @@
 <!DOCTYPE html>
-<html lang ="en">
+<html>
+<html lang="en">
 <head>
-	 <title>New Car</title>
+  <title>Furniture description</title>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
@@ -11,6 +12,7 @@
    <script  src="{{url_for('static', filename ='LivingStyle.js')}}"></script> 
   <link href="https://fonts.googleapis.com/css?family=Berkshire+Swash|Pontano+Sans" rel="stylesheet"> 
 </head>
+
 <body>
 <nav class="navbar navbar-default">
     <div id="mine" >
@@ -21,33 +23,29 @@
         <ul class="nav navbar-nav">
          <li ><a id="home" href="{{url_for('goodCategories')}}" class="elem">Home</a></li>
           <li><a  href="{{url_for('showLogin')}}" class="elem">Login</a></li>
-		<li><a href="{{url_for('goAbout')}}" class="elem">About</a></li>
+          <li><a href="{{url_for('goAbout')}}" class="elem">About</a></li>
         </ul>
       </div>
     </div>
   </nav>
-	<div class="row info well">
-		<div class="col-md-6 col-md-offset-1 padding-top">
-		 <h2>Please enter the details of the new car:<br/><br/></h2>
-		 <form action="#" method = "post">
-				<div >
-				<label for="make">Make:</label>
-				<input type ="text" class="" maxlength="100" name="make"><br/>
-				<label for="model">Model:</label>
-				<input type ="text" class="" maxlength="100" name="model"><br/>
-				<label for="year">Year:</label>
-				<input type ="text" class="" maxlength="100" name="year"><br/>
-				<label for="price">Price:</label>
-				<input type ="text" class="" maxlength="100" name="price"><br/>
-				<label for="color">Color:</label>
-				<input type ="text" class="" maxlength="100" name="color"><br/>
-				<label for="image">image:</label>
-				<input type ="text" class" maxlength="100" name="image">
-				<button type="submit" class="btn btn-default" id="submit" type="submit">
-				Create</button>
-				</div>
-			</form>
-		</div>
-	</div>
-</body>	
+
+
+
+
+
+
+<div class="info well">
+<h1>Furniture description:</h1>
+<p>{{myFurniture.style}} furniture</p>
+<p> Beautifully crafted in {{myFurniture.year}}</p>
+<p>Sale price: ${{myFurniture.price}}</p>
+
+<div id ="houseImage" class="itemPic">
+<img src="/static/img/{{myFurniture.image}}.jpg" alt="{{myFurniture.style}}" class="itemImage">
+</div><br/>
+<a href="{{url_for('updateFurnitureDetails', furnitureItem_style = myFurniture.style)}}"><input type="button" id="edit" class="btn btn-default" value="Edit" /></a>
+<a href="{{url_for('deleteFurnitureDetails',furnitureItem_style = myFurniture.style)}}"><input type="button" id="delete"  class="btn btn-default" value="Delete"/></a>
+</div>
+</body>
+
 </html>

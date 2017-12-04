@@ -1,6 +1,11 @@
 /**
  * Created by Anicet on 10/18/2015.
  */
+ 
+ $('.elem').on('click', function () {
+  $('#home').removeClass('active');
+   $(this).addClass('active');
+});
 function playImage()
 {
   if (document.getElementById("image_link").innerText === "View larger image")

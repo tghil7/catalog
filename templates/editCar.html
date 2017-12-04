@@ -1,7 +1,8 @@
 <!DOCTYPE html>
+
 <html lang ="en">
 <head>
-	 <title>New Car</title>
+	<title>New Car</title>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
@@ -12,7 +13,7 @@
   <link href="https://fonts.googleapis.com/css?family=Berkshire+Swash|Pontano+Sans" rel="stylesheet"> 
 </head>
 <body>
-<nav class="navbar navbar-default">
+	<nav class="navbar navbar-default">
     <div id="mine" >
       <div class="navbar-header">
         <a class="navbar-brand" href="{{url_for('goodCategories')}}">Living Well Properties</a>
@@ -28,8 +29,8 @@
   </nav>
 	<div class="row info well">
 		<div class="col-md-6 col-md-offset-1 padding-top">
-		 <h2>Please enter the details of the new car:<br/><br/></h2>
-		 <form action="#" method = "post">
+		 <h2>Edit car:<br/><br/></h2>
+			<form action="#" method = "post">
 				<div >
 				<label for="make">Make:</label>
 				<input type ="text" class="" maxlength="100" name="make"><br/>
@@ -44,7 +45,7 @@
 				<label for="image">image:</label>
 				<input type ="text" class" maxlength="100" name="image">
 				<button type="submit" class="btn btn-default" id="submit" type="submit">
-				Create</button>
+				Edit</button>
 				</div>
 			</form>
 		</div>

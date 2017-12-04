@@ -15,23 +15,38 @@
 	
 
 <body>
+<nav class="navbar navbar-default">
+    <div id="mine" >
+      <div class="navbar-header">
+        <a class="navbar-brand" href="{{url_for('goodCategories')}}">Living Well Properties</a>
+      </div>
+      <div>
+        <ul class="nav navbar-nav">
+         <li ><a id="home" href="{{url_for('goodCategories')}}" class="elem">Home</a></li>
+          <li><a  href="{{url_for('showLogin')}}" class="elem">Login</a></li>
+		<li><a href="{{url_for('goAbout')}}" class="elem">About</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
 
+
+
+
+
+
+<div class="info well">
 <h1>House description:</h1>
+<p>{{myHouse.style}} house</p>
+<p> Built in {{myHouse.year}}</p>
+<p>Sale price: ${{myHouse.price}}</p>
 
-
-{% for i in houseDescriptions %}
-
-<div>
-
-<p>{{i.style}} house</p>
-<p> Built in {{i.year}}</p>
-<p>Sale price: ${{i.price}}</p>
-</div>
 <div id ="houseImage" class="itemPic">
-<img src="/static{{i.image}}.jpg" alt="{{i.style}}" class="itemImage">
+<img src="/static/img/{{myHouse.image}}.jpg" alt="{{myHouse.style}}" class="itemImage">
+</div>
 </div>
 
-{% endfor %}
+
 </body>
 
 </html>
