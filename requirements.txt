@@ -1,6 +1,6 @@
 altgraph==0.10.2
 bdist-mpkg==0.5.0
-python==2.7.13
+python==2.7.14
 click==6.6
 SqlAlchemy==1.1.2
 oauth2client
