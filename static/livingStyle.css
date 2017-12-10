@@ -3,6 +3,10 @@
  body{
  font-family: 'Pontano Sans', sans-serif !important;
 }
+
+.hide{
+	display:none;
+}
  
  .linkColor {
      color: whitesmoke !important;
@@ -75,6 +79,11 @@ h1{
   body{
  font-family: 'Pontano Sans', sans-serif !important;
 }
+
+.hide{
+	display:none;
+}
+ 
  
 #pictures{
 width: 100%;

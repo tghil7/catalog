@@ -1,22 +1,26 @@
-from flask import Flask, render_template, url_for, request, flash, redirect, jsonify
-app = Flask(__name__)
+import random
+import string
+import httplib2
+import json
+import requests
+from flask import Flask, render_template
+from flask import url_for, request
+from flask import flash, redirect, jsonify
+
 
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from database_setup import Base, Category, HouseItem, FurnitureItem, CarItem, User
+from database_setup import Base, Category
+from database_setup import HouseItem, FurnitureItem, CarItem, User
 
 # IMPORTS FOR ANTI FORGERY STATE TOKEN
 from flask import session as login_session
-import random
-import string
-
 # IMPORTS OAUTH
 from oauth2client.client import flow_from_clientsecrets
 from oauth2client.client import FlowExchangeError
-import httplib2
-import json
 from flask import make_response
-import requests
+
+app = Flask(__name__)
 
 CLIENT_ID = json.loads(
     open('client_secrets.json', 'r').read())['web']['client_id']
@@ -66,7 +70,8 @@ def gconnect():
     result = json.loads(h.request(url, 'GET')[1])
     # If there was an error in the access token info, abort.
     if result.get('error') is not None:
-        response = make_response(json.dumps(result.get('error')), 500)
+        response = make_response(
+            json.dumps(result.get('error')), 500)
         response.headers['Content-Type'] = 'application/json'
         return response
 
@@ -89,7 +94,8 @@ def gconnect():
     stored_access_token = login_session.get('access_token')
     stored_gplus_id = login_session.get('gplus_id')
     if stored_access_token is not None and gplus_id == stored_gplus_id:
-        response = make_response(json.dumps('Current user is already connected.'),
+        response = make_response(json.dumps('Current user'
+                                            'is already connected.'),
                                  200)
         response.headers['Content-Type'] = 'application/json'
         return response
@@ -121,7 +127,8 @@ def gconnect():
     output += '!</h1>'
     output += '<img src="'
     output += login_session['picture']
-    output += ' " style = "width: 300px; height: 300px;border-radius: 150px;-webkit-border-radius: 150px;-moz-border-radius: 150px;"> '
+    output += ' " style = "width: 300px; height: 300px;border-radius: 150px;"'
+    '"-webkit-border-radius: 150px;-moz-border-radius: 150px;"> '
     flash("You are now logged in as %s" % login_session['username'])
     print "done!"
     return output
@@ -130,11 +137,13 @@ def gconnect():
 
 
 def createUser(login_session):
-    newUser = User(name=login_session['username'], email=login_session[
+    newUser = User(name=login_session['username'],
+                   email=login_session[
                    'email'], picture=login_session['picture'])
     session.add(newUser)
     session.commit()
-    user = session.query(User).filter_by(email=login_session['email']).one()
+    user = session.query(User).filter_by(
+        email=login_session['email']).one()
     return user.id
 
 
@@ -165,7 +174,8 @@ def gdisconnect():
             'Current user not connected.'), 401)
         response.headers['Content-Type'] = 'application/json'
         return response
-    url = 'https://accounts.google.com/o/oauth2/revoke?token=%s' % login_session['access_token']
+    url = 'https://accounts.google.com/o/oauth2/'
+    'revoke?token=%s' % login_session['access_token']
     h = httplib2.Http()
     result = h.request(url, 'GET')[0]
     print 'result is '
@@ -200,7 +210,11 @@ def goodCategories():
     allCars = session.query(CarItem).all()
     allHouses = session.query(HouseItem).all()
     allFurnitures = session.query(FurnitureItem).all()
-    return render_template("home.html", categories=categories, latestCars=latestCars, latestHouses=latestHouses, latestFurnitures=latestFurnitures, allCars=allCars, allHouses=allHouses, allFurnitures=allFurnitures)
+    return render_template("home.html", categories=categories,
+                           latestCars=latestCars, latestHouses=latestHouses,
+                           latestFurnitures=latestFurnitures,
+                           allCars=allCars, allHouses=allHouses,
+                           allFurnitures=allFurnitures)
 
 
 @app.route('/catalog/<category_name>/menu')
@@ -212,12 +226,15 @@ def goodCategoryItems(category_name):
         items = session.query(HouseItem).all()
     elif category.name == "Furniture":
         items = session.query(FurnitureItem).all()
-    return render_template('categories.html', category_name=category_name, items=items, category=category)
+    return render_template('categories.html',
+                           category_name=category_name,
+                           items=items, category=category)
 
 
 @app.route('/catalog/<category_name>/menu/JSON')
 def goodCategoryItemsJSON(category_name):
-    category = session.query(Category).filter_by(name=category_name).one()
+    category = session.query(Category).filter_by(
+        name=category_name).one()
     if category.name == "Cars":
         items = session.query(CarItem).all()
     elif category.name == "House":
@@ -229,14 +246,17 @@ def goodCategoryItemsJSON(category_name):
 
 @app.route('/catalog/car/<carItem_make>')
 def carDetails(carItem_make):
-    myCar = session.query(CarItem).filter_by(make=carItem_make).one()
+    myCar = session.query(CarItem).filter_by(
+        make=carItem_make).one()
     carUserID = myCar.user_id
     if 'username' not in login_session:
         return redirect('/login')
     if login_session['user_id'] != carUserID:
-        return render_template('carFile.html', carItem_make=carItem_make, myCar=myCar)
+        return render_template('carFile.html',
+                               carItem_make=carItem_make, myCar=myCar)
     else:
-        return render_template('myCarFile.html', carItem_make=carItem_make, myCar=myCar)
+        return render_template('myCarFile.html',
+                               carItem_make=carItem_make, myCar=myCar)
 
 
 @app.route('/catalog/car/new', methods=['GET', 'POST'])
@@ -245,26 +265,35 @@ def addCarDetails():
         return redirect('/login')
     if request.method == 'POST':
         category = session.query(Category).filter_by(name="Cars").one()
-        newCarItem = CarItem(make=request.form.get('make'), model=request.form.get('model'),
-                             year=request.form.get('year'), price=request.form.get('price'),
-                             color=request.form.get('color'), image=request.form.get('image'), category_id=category.id,
+        newCarItem = CarItem(make=request.form.get('make'),
+                             model=request.form.get('model'),
+                             year=request.form.get('year'),
+                             price=request.form.get('price'),
+                             color=request.form.get('color'),
+                             image=request.form.get('image'),
+                             category_id=category.id,
                              user_id=login_session['user_id'])
         session.add(newCarItem)
         session.commit()
-        #flash ("New car item created!")
+        flash("New car item created!")
         return redirect(url_for('goodCategories'))
     else:
         return render_template('newCarItem.html')
 
 
-@app.route('/catalog/car/<carItem_make>/delete', methods=['GET', 'POST'])
+@app.route('/catalog/car/<carItem_make>/delete',
+           methods=['GET', 'POST'])
 def deleteCarDetails(carItem_make):
     if 'username' not in login_session:
         return redirect('/login')
-    carToDelete = session.query(CarItem).filter_by(make=carItem_make).one()
+    carToDelete = session.query(CarItem).filter_by(
+        make=carItem_make).one()
     deleteUserID = carToDelete.user_id
     if login_session['user_id'] != deleteUserID:
-        return "<script>function myFunction() {alert('You are not authorized to delete this car item.Please create your own car item in order to delete.');}</script><body onload='myFunction()''>"
+        return "<script>function myFunction() {alert('You are not authorized"
+        "to delete this car item."
+        "Please create your own car item in order to delete."
+        "');}</script><body onload='myFunction()''>"
 
     if request.method == 'POST':
         session.delete(carToDelete)
@@ -275,7 +304,8 @@ def deleteCarDetails(carItem_make):
         return render_template('carDelete.html', carItem=carToDelete)
 
 
-@app.route('/catalog/car/<carItem_make>/edit', methods=['GET', 'POST'])
+@app.route('/catalog/car/<carItem_make>/edit',
+           methods=['GET', 'POST'])
 def updateCarDetails(carItem_make):
     if 'username' not in login_session:
         return redirect('/login')
@@ -283,7 +313,10 @@ def updateCarDetails(carItem_make):
     category = session.query(Category).filter_by(name="Cars").one()
     editUserID = carToUpdate.user_id
     if login_session['user_id'] != editUserID:
-        return "<script>function myFunction() {alert('You are not authorized to delete this car item. Please create your own car item in order to delete.');}</script><body onload='myFunction()''>"
+        return "<script>function myFunction() {alert('You are not authorized"
+        "to delete this car item. Please create your own"
+        "car item in order"
+        "to delete.');}</script><body onload='myFunction()''>"
     if request.method == 'POST':
         if request.form.get('make'):
             carToUpdate.make = request.form.get('make')
@@ -302,40 +335,50 @@ def updateCarDetails(carItem_make):
         session.commit()
         return redirect(url_for('goodCategories'))
     else:
-        return render_template('editCar.html', carItem=carToUpdate)
+        return render_template('editCar.html',
+                               carItem=carToUpdate)
 
 
 @app.route('/catalog/house/<houseItem_style>')
 def houseDetails(houseItem_style):
-    myHouse = session.query(HouseItem).filter_by(style=houseItem_style).one()
+    myHouse = session.query(HouseItem).filter_by(
+        style=houseItem_style).one()
     houseUserID = myHouse.user_id
     if 'username' not in login_session:
         return redirect('/login')
     if login_session['user_id'] != houseUserID:
-        return render_template('houseFile.html', houseItem_style=houseItem_style, myHouse=myHouse)
+        return render_template('houseFile.html',
+                               houseItem_style=houseItem_style,
+                               myHouse=myHouse)
     else:
-        return render_template('myHouseFile.html', houseItem_style=houseItem_style, myHouse=myHouse)
+        return render_template('myHouseFile.html',
+                               houseItem_style=houseItem_style,
+                               myHouse=myHouse)
 
 
-@app.route('/catalog/house/new', methods=['GET', 'POST'])
+@app.route('/catalog/house/new',
+           methods=['GET', 'POST'])
 def addHouseDetails():
     if 'username' not in login_session:
         return redirect('/login')
     if request.method == 'POST':
         category = session.query(Category).filter_by(name="House").one()
         newHouseItem = HouseItem(style=request.form.get('style'),
-                                 year=request.form.get('year'), price=request.form.get('price'),
-                                 image=request.form.get('image'), category_id=category.id,
+                                 year=request.form.get('year'),
+                                 price=request.form.get('price'),
+                                 image=request.form.get('image'),
+                                 category_id=category.id,
                                  user_id=login_session['user_id'])
         session.add(newHouseItem)
         session.commit()
-        #flash ("New House item created!")
+        flash("New House item created!")
         return redirect(url_for('goodCategories'))
     else:
         return render_template('newHouseItem.html')
 
 
-@app.route('/catalog/house/<houseItem_style>/edit', methods=['GET', 'POST'])
+@app.route('/catalog/house/<houseItem_style>/edit',
+           methods=['GET', 'POST'])
 def updateHouseDetails(houseItem_style):
     if 'username' not in login_session:
         return redirect('/login')
@@ -344,7 +387,11 @@ def updateHouseDetails(houseItem_style):
     category = session.query(Category).filter_by(name="House").one()
     editUserID = houseToUpdate.user_id
     if login_session['user_id'] != editUserID:
-        return "<script>function myFunction() {alert('You are not authorized to edit this item. Please create your own car item in order to delete.');}</script><body onload='myFunction()''>"
+        return "<script>function myFunction() {alert('You are not authorized"
+    "to edit this item. Please create your own car item"
+    "in order to delete.')"
+    ";}</script>"
+    "<body onload='myFunction()''>"
     if request.method == 'POST':
         if request.form.get('style'):
             houseToUpdate.style = request.form.get('style')
@@ -359,18 +406,24 @@ def updateHouseDetails(houseItem_style):
         session.commit()
         return redirect(url_for('goodCategories'))
     else:
-        return render_template('editHouse.html', houseItem=houseToUpdate)
+        return render_template('editHouse.html',
+                               houseItem=houseToUpdate)
 
 
-@app.route('/catalog/house/<houseItem_style>/delete', methods=['GET', 'POST'])
+@app.route('/catalog/house/<houseItem_style>/delete',
+           methods=['GET', 'POST'])
 def deleteHouseDetails(houseItem_style):
     if 'username' not in login_session:
         return redirect('/login')
-    houseToDelete = session.query(HouseItem).filter_by(
+    houseToDelete = session.query(
+        HouseItem).filter_by(
         style=houseItem_style).one()
     deleteUserID = houseToDelete.user_id
     if login_session['user_id'] != deleteUserID:
-        return "<script>function myFunction() {alert('You are not authorized to delete this car item.Please create your own car item in order to delete.');}</script><body onload='myFunction()''>"
+        return "<script>function myFunction() {alert('You are not authorized"
+        "to delete this car item.Please create your own"
+        "house item in order to delete.');}"
+        "</script><body onload='myFunction()''>"
 
     if request.method == 'POST':
         session.delete(houseToDelete)
@@ -378,7 +431,8 @@ def deleteHouseDetails(houseItem_style):
         session.commit()
         return redirect(url_for('goodCategories'))
     else:
-        return render_template('houseDelete.html', houseItem=houseToDelete)
+        return render_template('houseDelete.html',
+                               houseItem=houseToDelete)
 
 
 @app.route('/catalog/furniture/<furnitureItem_style>')
@@ -389,30 +443,38 @@ def furnitureDetails(furnitureItem_style):
     if 'username' not in login_session:
         return redirect('/login')
     if login_session['user_id'] != furnitureUserID:
-        return render_template('furnitureFile.html', furnitureItem_style=furnitureItem_style, myFurniture=myFurniture)
+        return render_template('furnitureFile.html',
+                               furnitureItem_style=furnitureItem_style,
+                               myFurniture=myFurniture)
     else:
-        return render_template('myFurnitureFile.html', furnitureItem_style=furnitureItem_style, myFurniture=myFurniture)
+        return render_template('myFurnitureFile.html',
+                               furnitureItem_style=furnitureItem_style,
+                               myFurniture=myFurniture)
 
 
-@app.route('/catalog/furniture/new', methods=['GET', 'POST'])
+@app.route('/catalog/furniture/new',
+           methods=['GET', 'POST'])
 def addFurnitureDetails():
     if 'username' not in login_session:
         return redirect('/login')
     if request.method == 'POST':
         category = session.query(Category).filter_by(name="Furniture").one()
         newFurnitureItem = FurnitureItem(style=request.form.get('style'),
-                                         year=request.form.get('year'), price=request.form.get('price'),
-                                         image=request.form.get('image'), category_id=category.id,
+                                         year=request.form.get('year'),
+                                         price=request.form.get('price'),
+                                         image=request.form.get('image'),
+                                         category_id=category.id,
                                          user_id=login_session['user_id'])
         session.add(newFurnitureItem)
         session.commit()
-        #flash ("New car item created!")
+        flash("New car item created!")
         return redirect(url_for('goodCategories'))
     else:
         return render_template('newFurnitureItem.html')
 
 
-@app.route('/catalog/furniture/<furnitureItem_style>/edit', methods=['GET', 'POST'])
+@app.route('/catalog/furniture/<furnitureItem_style>/edit',
+           methods=['GET', 'POST'])
 def updateFurnitureDetails(furnitureItem_style):
     if 'username' not in login_session:
         return redirect('/login')
@@ -421,7 +483,10 @@ def updateFurnitureDetails(furnitureItem_style):
     category = session.query(Category).filter_by(name="Furniture").one()
     editUserID = furnitureToUpdate.user_id
     if login_session['user_id'] != editUserID:
-        return "<script>function myFunction() {alert('You are not authorized to delete this car item. Please create your own car item in order to delete.');}</script><body onload='myFunction()''>"
+        return "<script>function myFunction() {alert('You are not authorized"
+        "to edit this furniture item."
+        "Please create your own furniture item in order "
+        "to delete.');}</script><body onload='myFunction()''>"
     if request.method == 'POST':
         if request.form.get('style'):
             furnitureToUpdate.style = request.form.get('style')
@@ -436,10 +501,12 @@ def updateFurnitureDetails(furnitureItem_style):
         session.commit()
         return redirect(url_for('goodCategories'))
     else:
-        return render_template('editFurniture.html', furnitureItem=furnitureToUpdate)
+        return render_template('editFurniture.html',
+                               furnitureItem=furnitureToUpdate)
 
 
-@app.route('/catalog/furniture/<furnitureItem_style>/delete', methods=['GET', 'POST'])
+@app.route('/catalog/furniture/<furnitureItem_style>/delete',
+           methods=['GET', 'POST'])
 def deleteFurnitureDetails(furnitureItem_style):
     if 'username' not in login_session:
         return redirect('/login')
@@ -447,7 +514,10 @@ def deleteFurnitureDetails(furnitureItem_style):
         style=furnitureItem_style).one()
     deleteUserID = furnitureToDelete.user_id
     if login_session['user_id'] != deleteUserID:
-        return "<script>function myFunction() {alert('You are not authorized to delete this car item.Please create your own car item in order to delete.');}</script><body onload='myFunction()''>"
+        return "<script>function myFunction()"
+        "{alert('You are not authorized to"
+        "delete this car item.Please create your own car item"
+        "in order to delete.');}</script><body onload='myFunction()''>"
 
     if request.method == 'POST':
         session.delete(furnitureToDelete)
@@ -455,7 +525,8 @@ def deleteFurnitureDetails(furnitureItem_style):
         session.commit()
         return redirect(url_for('goodCategories'))
     else:
-        return render_template('furnitureDelete.html', furnitureItem=furnitureToDelete)
+        return render_template('furnitureDelete.html',
+                               furnitureItem=furnitureToDelete)
 
 
 @app.route('/catalog/about')
