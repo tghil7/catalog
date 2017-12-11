@@ -1,0 +1,109 @@
+<!DOCTYPE html >
+<html lang="en">
+<head>
+  <title>Home</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+   <link rel="stylesheet" href="{{url_for('static', filename ='livingStyle.css')}}"> 
+   <script type="text/javascript" src="{{url_for('static', filename ='LivingStyle.js')}}"></script> 
+  <link href="https://fonts.googleapis.com/css?family=Berkshire+Swash|Pontano+Sans" rel="stylesheet"> 
+</head> 
+<body class="container">
+	
+	<nav class="navbar navbar-default">
+    <div id="mine" >
+      <div class="navbar-header">
+        <a class="navbar-brand" href="{{url_for('goodCategories')}}">Living Well Properties</a>
+      </div>
+      <div>
+        <ul class="nav navbar-nav">
+		  <li class="active"><a id="home" href="{{url_for('goodCategories')}}" class="elem">Home</a></li>
+          <li><a  href="{{url_for('gdisconnect')}}" class="elem">Logout</a></li>
+          <li><a href="{{url_for('goAbout')}}" class="elem">About</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  
+  <div class = 'flash'>
+		      {% with messages = get_flashed_messages() %}
+      {% if messages %}
+          
+        <ul>
+        {% for message in messages %}
+            <li> <strong> {{ message }} </strong> </li>
+        {% endfor %}
+        </ul>
+        {% endif %}
+    {% endwith %}
+
+</div>
+	
+	
+	
+	
+   <div id="pictures">
+   <!--Indicators-->
+                  <div id="add">
+				   <a href="{{url_for('selectCategory')}}"><strong>Add new item</strong></a>
+				  </div>
+                  <div id="searchSection">
+                        <h3>Find your dream  car, house or furniture here:</h3>                     
+                            <!-- Nav tabs -->
+                             <ul class="nav nav-tabs" data-tabs="tabs">
+							      <li class="active " ><a class="#191970" href="#latestItems" data-toggle="tab"><strong>Latest Items</strong></a></li>
+							       <li ><a class="#191970" href="#cars" data-toggle="tab"><strong>Cars</strong></a></li>
+                                   <li><a class="#191970" href="#houses" data-toggle="tab"><strong>Houses</strong></a></li>
+                                   <li><a class="#191970" href="#furnitures" data-toggle="tab"><strong>Furnitures</strong></a></li>
+                             </ul>
+ 
+                         
+                            <!-- Tab panes -->
+                           <div class="tab-content">     
+                                <div class="tab-pane active" id="latestItems">
+									<h3>Latest Items</h3><br/><br/>
+						               {%for i in latestCars %}
+	                                        <p><a class="linkColor" href="{{url_for('carDetails',carItem_make = i.make )}}">{{ (i.year|string) + " " + i.make + " "  + i.model + " " + "(Car)"}}</a></p>
+							           {% endfor %}
+							           {%for i in latestHouses %}
+	                                        <p><a class="linkColor" href="{{url_for('houseDetails',houseItem_style = i.style )}}">{{i.style + " style. Built in  "  + (i.year|string)+ "(House)"}}</a></p>
+							           {% endfor %}
+							           {%for i in latestFurnitures %}
+	                                        <p><a class="linkColor" href="{{url_for('furnitureDetails',furnitureItem_style = i.style )}}">{{i.style + " conception. Made in  "  + (i.year|string)+ "(Furniture)"}}</a></p>
+							           {% endfor %}						 
+								</div>
+                                <div class="tab-pane extend" id="cars">
+								<br/><br/>
+								 {%for  i in allCars %}
+								           <p><a class="linkColor" href="{{url_for('carDetails',carItem_make = i.make )}}">{{ (i.year|string) + " " + i.make + " "  + i.model}}</a></p>
+								{% endfor %}
+								</div>
+                                <div class="tab-pane extend"  id="houses">
+									<br/><br/>
+								    {%for  i in allHouses %}
+								            <p><a class="linkColor" href="{{url_for('houseDetails',houseItem_style = i.style )}}">{{i.style + " style. Built in  "  + (i.year|string)}}</a></p>
+								   {% endfor %}
+								</div>
+                                <div class="tab-pane extend" id="furnitures">
+								 <br/><br/>
+								 {%for  i in allFurnitures %}
+								          <p><a class="linkColor" href="{{url_for('furnitureDetails',furnitureItem_style = i.style )}}">{{i.style + " conception. Made in  "  + (i.year|string)}}</a></p>
+								 {% endfor %}
+								</div>
+                           </div>
+                        
+   
+	          </div>
+    	
+      
+   </div>
+   
+     
+
+   
+ 
+</body>
+</html>
