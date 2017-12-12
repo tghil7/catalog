@@ -2,11 +2,16 @@ autopep8==1.3.2
 backports.shutil-get-terminal-size==1.0.0
 certifi==2017.11.5
 chardet==3.0.4
+click==6.7
 configparser==3.5.0
 enum34==1.1.6
 flake8==3.5.0
+Flask==0.12.2
 httplib2==0.10.3
 idna==2.5
+itsdangerous==0.24
+Jinja2==2.10
+MarkupSafe==1.0
 mccabe==0.6.1
 pathlib==1.0.1
 pep8==1.7.0
@@ -23,3 +28,4 @@ twilio==6.4.1
 urllib3==1.22
 virtualenv==15.1.0
 virtualenv-clone==0.2.6
+Werkzeug==0.13
