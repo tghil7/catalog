@@ -29,7 +29,7 @@ heroku = Heroku(app)
 CLIENT_ID = json.loads(
     open('client_secrets.json', 'r').read())['web']['client_id']
 
-engine = create_engine('postgresql:///catalogmenuwithusers')
+engine = create_engine('DATABASE_URL')
 Base.metadata.bind = engine
 
 DBSession = sessionmaker(bind=engine)
