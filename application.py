@@ -6,6 +6,9 @@ import requests
 from flask import Flask, render_template
 from flask import url_for, request
 from flask import flash, redirect, jsonify
+from flask.ext.heroku import Heroku
+
+
 
 
 from sqlalchemy import create_engine
@@ -21,6 +24,7 @@ from oauth2client.client import FlowExchangeError
 from flask import make_response
 
 app = Flask(__name__)
+heroku = Heroku(app)
 
 CLIENT_ID = json.loads(
     open('client_secrets.json', 'r').read())['web']['client_id']
