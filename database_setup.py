@@ -96,5 +96,5 @@ class FurnitureItem(Base):
         }
 
 
-engine = create_engine('DATABASE_URL')
+engine = create_engine('postgresql:///catalogmenuwithusers')
 Base.metadata.create_all(engine)

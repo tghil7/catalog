@@ -6,11 +6,6 @@ import requests
 from flask import Flask, render_template
 from flask import url_for, request
 from flask import flash, redirect, jsonify
-from flask.ext.heroku import Heroku
-
-
-
-
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from database_setup import Base, Category
@@ -24,12 +19,12 @@ from oauth2client.client import FlowExchangeError
 from flask import make_response
 
 app = Flask(__name__)
-heroku = Heroku(app)
+
 
 CLIENT_ID = json.loads(
     open('client_secrets.json', 'r').read())['web']['client_id']
 
-engine = create_engine('DATABASE_URL')
+engine = create_engine('postgresql:///catalogmenuwithusers')
 Base.metadata.bind = engine
 
 DBSession = sessionmaker(bind=engine)
@@ -201,6 +196,7 @@ def gdisconnect():
         response.headers['Content-Type'] = 'application/json'
         return response
 
+
 @app.route('/clearSession')
 def clearSession():
     login_session.clear()
@@ -222,13 +218,16 @@ def goodCategories():
     allFurnitures = session.query(FurnitureItem).all()
     if 'username' not in login_session:
         return render_template("home.html", categories=categories,
-                               latestCars=latestCars, latestHouses=latestHouses,
+                               latestCars=latestCars,
+                               latestHouses=latestHouses,
                                latestFurnitures=latestFurnitures,
                                allCars=allCars, allHouses=allHouses,
                                allFurnitures=allFurnitures)
     else:
-        return render_template("homeLoggedIn.html", categories=categories,
-                               latestCars=latestCars, latestHouses=latestHouses,
+        return render_template("homeLoggedIn.html",
+                               categories=categories,
+                               latestCars=latestCars,
+                               latestHouses=latestHouses,
                                latestFurnitures=latestFurnitures,
                                allCars=allCars, allHouses=allHouses,
                                allFurnitures=allFurnitures)
@@ -254,7 +253,6 @@ def selectCategory():
         return redirect('/login')
     else:
         return render_template('categoryChoice.html')
-    
 
 
 @app.route('/catalog/<category_name>/menu/JSON')
@@ -316,10 +314,10 @@ def deleteCarDetails(carItem_make):
         make=carItem_make).one()
     deleteUserID = carToDelete.user_id
     if login_session['user_id'] != deleteUserID:
-        return "<script>function myFunction() {alert('You are not authorized'"
-        "'to delete this car item.'"
-        "'Please create your own car item in order to delete.'"
-        ");}</script><body onload='myFunction()''>"
+        return ("<script>function myFunction() {alert('You are not authorized "
+                "to delete this car item."
+                "Please create your own car item"
+                "in order to delete.');}</script><body onload='myFunction()'>")
 
     if request.method == 'POST':
         session.delete(carToDelete)
@@ -339,10 +337,10 @@ def updateCarDetails(carItem_make):
     category = session.query(Category).filter_by(name="Cars").one()
     editUserID = carToUpdate.user_id
     if login_session['user_id'] != editUserID:
-        return "<script>function myFunction() {alert('You are not authorized'"
-        "'to delete this car item. Please create your own'"
-        "'car item in order'"
-        "'to delete.');}</script><body onload='myFunction()''>"
+        return ("<script>function myFunction() {alert('You are not authorized "
+                "to edit this car item. Please create your own"
+                "car item in order"
+                "to delete.');}</script><body onload='myFunction()'>")
     if request.method == 'POST':
         if request.form.get('make'):
             carToUpdate.make = request.form.get('make')
@@ -413,11 +411,11 @@ def updateHouseDetails(houseItem_style):
     category = session.query(Category).filter_by(name="House").one()
     editUserID = houseToUpdate.user_id
     if login_session['user_id'] != editUserID:
-        return "<script>function myFunction() {alert('You are not authorized'"
-    "'to edit this item. Please create your own house item'"
-    "'in order to delete.')"
-    ";}</script>"
-    "<body onload='myFunction()'>"
+        return ("<script>function myFunction() {alert('You are not authorized "
+                "to edit this item. Please create your own house item"
+                "in order to delete.')"
+                ";}</script>"
+                "<body onload='myFunction()'>")
     if request.method == 'POST':
         if request.form.get('style'):
             houseToUpdate.style = request.form.get('style')
@@ -446,10 +444,10 @@ def deleteHouseDetails(houseItem_style):
         style=houseItem_style).one()
     deleteUserID = houseToDelete.user_id
     if login_session['user_id'] != deleteUserID:
-        return "<script>function myFunction() {alert('You are not authorized'"
-        "'to delete this house item.Please create your own'"
-        "'house item in order to delete.');}"
-        "</script><body onload='myFunction()'>"
+        return ("<script>function myFunction() {alert('You are not authorized "
+                "to delete this item.Please create your own"
+                "house item in order to delete.');}"
+                "</script><body onload='myFunction()'>")
 
     if request.method == 'POST':
         session.delete(houseToDelete)
@@ -509,10 +507,10 @@ def updateFurnitureDetails(furnitureItem_style):
     category = session.query(Category).filter_by(name="Furniture").one()
     editUserID = furnitureToUpdate.user_id
     if login_session['user_id'] != editUserID:
-        return "<script>function myFunction() {alert('You are not authorized'"
-        "'to edit this furniture item.'"
-        "'Please create your own furniture item in order '"
-        "'to delete.');}</script><body onload='myFunction()'>"
+        return ("<script>function myFunction() {alert('You are not authorized "
+                "to edit this furniture item."
+                "Please create your own furniture item in order "
+                "to delete.');}</script><body onload='myFunction()'>")
     if request.method == 'POST':
         if request.form.get('style'):
             furnitureToUpdate.style = request.form.get('style')
@@ -540,10 +538,11 @@ def deleteFurnitureDetails(furnitureItem_style):
         style=furnitureItem_style).one()
     deleteUserID = furnitureToDelete.user_id
     if login_session['user_id'] != deleteUserID:
-        return "<script>function myFunction()"
-        "{alert('You are not authorized to'"
-        "'delete this furniture item.Please create your own furniture item'"
-        "'in order to delete.');}</script><body onload='myFunction()'>"
+        return ("<script>function myFunction()"
+                "{alert('You are not authorized to "
+                "delete this furniture item."
+                "Please create your own furniture item"
+                "in order to delete.');}</script><body onload='myFunction()'>")
 
     if request.method == 'POST':
         session.delete(furnitureToDelete)
