@@ -4,8 +4,8 @@
    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js">
   </script>
 
-<script src="//apis.google.com/js/platform.js?onload=start" async defer> </script>
-
+<script src="https://apis.google.com/js/platform.js" async defer></script>
+<meta name="google-signin-client_id" content="323125865197-umbu0476sgqh9nhdgmv456vek742e3eq.apps.googleusercontent.com">
 <!-- END PRE-REQUISITES FOR GOOGLE SIGN IN -->
 
 
@@ -19,7 +19,7 @@
 
           
           <div id="signinButton">
-          <span class="g-signin"
+          <span class="g-signin2"
             data-scope="openid email"
             data-clientid="323125865197-umbu0476sgqh9nhdgmv456vek742e3eq.apps.googleusercontent.com"
             data-redirecturi="postmessage"
@@ -68,7 +68,7 @@ function signInCallback(authResult) {
 
 <!--FACEBOOK SIGN IN -->
 <script>
-  window.fbAsyncInit = function() {
+  /*window.fbAsyncInit = function() {
   FB.init({
     appId      : '846524132078825',
     cookie     : true,  // enable cookies to allow the server to access 
@@ -114,7 +114,7 @@ function signInCallback(authResult) {
       
   });
     });
-  }
+  }*/
 </script>
 
 
