@@ -1,5 +1,6 @@
 /**
  * Created by Anicet on 10/18/2015.
+ * Just modified the filename to see if that resolves the display issue. 
  */
  
  $('.elem').on('click', function () {
