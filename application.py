@@ -14,8 +14,8 @@ from database_setup import HouseItem, FurnitureItem, CarItem, User
 # IMPORTS FOR ANTI FORGERY STATE TOKEN
 from flask import session as login_session
 # IMPORTS OAUTH
-from oauth2client.client import flow_from_clientsecrets
-from oauth2client.client import FlowExchangeError
+from oauthlib.oauth2 import BackendApplicationClient
+from requests_oauthlib import OAuth2Session
 from flask import make_response
 
 app = Flask(__name__)
@@ -35,7 +35,7 @@ session = DBSession()
 @app.route('/login')
 def showLogin():
     state = ''.join(random.choice(string.ascii_uppercase + string.digits)
-                    for x in xrange(32))
+                    for x in range(32))
     login_session['state'] = state
     return render_template('login.html', STATE=state)
 
@@ -86,7 +86,7 @@ def gconnect():
     if result['issued_to'] != CLIENT_ID:
         response = make_response(
             json.dumps("Token's client ID does not match app's."), 401)
-        print "Token's client ID does not match app's."
+        print ("Token's client ID does not match app's.")
         response.headers['Content-Type'] = 'application/json'
         return response
 
@@ -129,7 +129,7 @@ def gconnect():
     output += ' " style = "width: 300px; height: 300px;border-radius: 150px;"'
     '"-webkit-border-radius: 150px;-moz-border-radius: 150px;"> '
     flash("You are now logged in as %s" % login_session['username'])
-    print "done!"
+    print ("done!")
     return output
 
 # User Helper Functions
@@ -165,22 +165,22 @@ def getUserID(email):
 def gdisconnect():
     access_token = login_session.get('access_token')
     if access_token is None:
-        print 'Access Token is None'
+        print ('Access Token is None')
         response = make_response(json.dumps(
             'Current user not connected.'), 401)
         response.headers['Content-Type'] = 'application/json'
         return response
-    print 'In gdisconnect access token is %s', access_token
-    print 'User name is: '
-    print login_session['username']
+    print ('In gdisconnect access token is %s', access_token)
+    print ('User name is: ')
+    print (login_session['username'])
     url = ''
     url += 'https://accounts.google.com/'
     url += 'o/oauth2/revoke?'
     url += 'token=%s' % login_session['access_token']
     h = httplib2.Http()
     result = h.request(url, 'GET')[0]
-    print 'result is '
-    print result
+    print ('result is ')
+    print (result)
     if result['status'] == '200':
         del login_session['access_token']
         del login_session['gplus_id']
